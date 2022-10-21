@@ -286,5 +286,9 @@ function searchByHeight(people){
 }
 
 function searchByWeight(people){
-
+    let minchoice = prompt("What should the minimum Weight be? (in inches)");
+    let maxchoice = prompt("what should the maximum Weight be? (in inches)");
+    // VALIDATE promptFor
+    let results = people.filter(function(pers){return pers.weight > minchoice && pers.weight < maxchoice})
+    return results;
 }
