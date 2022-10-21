@@ -252,6 +252,12 @@ switch(choice){
     case '3':
         results = searchByHeight(people);
         continueSearch(results);
+    case '4':
+        results = searchByWeight(people);
+        continueSearch(results);
+    case '5':
+        results = searchByEyeColor(people);
+        continueSearch(results);
     default:
         return searchByTraits(people);
 }
@@ -268,14 +274,12 @@ function continueSearch(people){
     }
 
 }
-
 function searchByGender(people){
     let choice = prompt("Search by 'male' or 'female'?");
     // change to promptFor later
-    let results = people.filter(function(pers){return pers.gender == choice});
+    let results = people.filter(function(pers){return pers.gender === choice});
     return results;
 }
-
 function searchByHeight(people){
     let minchoice = prompt("What should the minimum Height be? (in inches)");
     let maxchoice = prompt("what should the maximum Height be? (in inches)");
@@ -284,11 +288,29 @@ function searchByHeight(people){
     return results;
 
 }
-
 function searchByWeight(people){
-    let minchoice = prompt("What should the minimum Weight be? (in inches)");
-    let maxchoice = prompt("what should the maximum Weight be? (in inches)");
+    let minchoice = prompt("What should the minimum Weight be? (in lbs)");
+    let maxchoice = prompt("what should the maximum Weight be? (in lbs)");
     // VALIDATE promptFor
     let results = people.filter(function(pers){return pers.weight > minchoice && pers.weight < maxchoice})
+    return results;
+}
+
+function addItemToString(array,string,groupName){
+    string +=`${groupName}`;
+    for (let item of array){
+        string +=`${item} \n`;
+    }
+    string += `\n`;
+    return string;
+}
+
+function searchByEyeColor(people){
+    let eyeColors = people.map(function(pers){return pers.eyeColor})
+    let uniqueEyeColors = eyeColors.filter(function(color,index,array){return array.indexOf(color) == index})
+    let colorsString;
+    colorsString = addItemToString(uniqueEyeColors,colorsString,"Eye Colors in this List:\n")
+    let choice = prompt(`${colorsString} Which Eye Color would you like to search by?`)
+    let results = people.filter(function(pers){return pers.eyeColor==choice});
     return results;
 }
