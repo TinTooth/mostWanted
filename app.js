@@ -217,6 +217,15 @@ function findPersonParents(person,people){
     let parents = people.filter(function(pers){return pers.id == person.parents[0] || pers.id == person.parents[1]})
     return parents;
 }
+
+/**
+ * This takes an array of people and adds their names to a string,underneath the groupName in a column
+ * so it can be displayed in a Confrim window.
+ * @param {array} people  array of people.
+ * @param {string} string  a string that the results are stored in
+ * @param {string} groupName a string that is listed above the names of the people (Siblings, Spouse....)
+ * @returns {string}          
+ */
 function addNamesToString(people,string,groupName){
     string += `${groupName}:\n`
     if(people.length != 0){ for(let person of people){string += `${person.firstName} ${person.lastName}\n`}}
@@ -278,7 +287,6 @@ function continueSearch(people){
     else{
         app(data);
     }
-
 }
 function searchByGender(people){
     let choice = prompt("Search by 'male' or 'female'?");
@@ -309,7 +317,14 @@ function searchByWeight(people){
     let results = people.filter(function(pers){return pers.weight > minchoice && pers.weight < maxchoice})
     return results;
 }
-
+/**
+ * This takes an array of strings and adds them to a string,underneath the groupName in a column
+ * so it can be displayed in a Confrim window.
+ * @param {array} array  array of strings.
+ * @param {string} string  a string that the results are stored in
+ * @param {string} groupName a string that is listed above the strings
+ * @returns {string}          
+ */
 function addItemToString(array,string,groupName){
     string +=`${groupName}`;
     for (let item of array){
