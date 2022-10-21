@@ -31,7 +31,9 @@ function app(people) {
         case "no":
             //! TODO #4: Declare a searchByTraits (multiple traits) function //////////////////////////////////////////
                 //! TODO #4a: Provide option to search for single or multiple //////////////////////////////////////////
-            searchResults = searchByTraits(people);
+
+
+            searchResults = searchByTrait(people);
             break;
         default:
             // Re-initializes the app() if neither case was hit above. This is an instance of recursion.
@@ -252,10 +254,11 @@ function findPersonDescendants(person,people){
 
 
 function continueSearch(people){
-    let results = '';
+    let results ='';
     results = addNamesToString(people,results,"Search Results", maleFemale);
+    results += `Number of Results: ${people.length}\n`;
     if (confirm(`${results}\n Select 'Ok' to filter these results by another trait or 'Cancel' to start a new Search`)){
-        searchByTraits(people);
+        searchByTrait(people);
     }
     else{
         app(data);
@@ -306,29 +309,27 @@ function addItemToString(array,string,groupName){
     string += `\n`;
     return string;
 }
-
 function searchByEyeColor(people){
     let options = people.map(function(pers){return pers.eyeColor})
     let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index})
-    let string;
+    let string ='';
     string = addItemToString(uniqueOptions,string, `Eye Colors in this List:\n`)
     let choice = prompt(`${string} Which Eye Color would you like to search by?`)
     // VALIDATION
     let results = people.filter(function(pers){return pers.eyeColor==choice});
     return results;
 }
-
 function searchByOccupation(people){
     let options = people.map(function(pers){return pers.occupation})
     let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index})
-    let string;
-    string = addItemToString(uniqueOptions,string, `Occupations in this List:\n`)
+    let string = ``;
+    string = addItemToString(uniqueOptions,string, `Occupations Found:\n`)
     let choice = prompt(`${string} Which Occupation would you like to search by?`)
     // VALIDATION
     let results = people.filter(function(pers){return pers.occupation==choice});
     return results;
 }
-function searchByTraits(people){
+function searchByTrait(people){
 let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
 //  Change promptFor later
 let results;
