@@ -59,28 +59,28 @@ function mainMenu(person, people) {
         return app(people);
     }
     let displayOption = prompt(
-        `Found ${person[0].firstName} ${person[0].lastName}. Do you want to know their 'info', 'family', or 'descendants'?\nType the option you want or type 'restart' or 'quit'.`
+        `Found ${person[0].firstName} ${person[0].lastName}. Do you want to...\n1. See their Info\n2. See their Family\n3. See Their Descendants?\n4. Restart Search\n5. Quit Search\n\nEnter Corresponding Number`
     );
     // Routes our application based on the user's input
     switch (displayOption) {
-        case "info":
+        case "1":
             let personInfo = displayPerson(person[0]);
             alert(personInfo);
             break;
-        case "family":
+        case "2":
             let personFamily = findPersonFamily(person[0], people);
             alert(personFamily);
             break;
-        case "descendants":
+        case "3":
             // HINT: Review recursion lecture + demo for bonus user story
             let personDescendants = findPersonDescendants(person[0], people);
             alert(personDescendants);
             break;
-        case "restart":
+        case "4":
             // Restart app() from the very beginning
             app(people);
             break;
-        case "quit":
+        case "5":
             // Stop application execution
             break;
         default:
@@ -251,7 +251,7 @@ function findPersonDescendants(person,people){
 }
 
 function searchByTraits(people){
-let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3.Height\n4.Weight\n5.Eye Color\n6.Occupation");
+let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
 //  Change promptFor later
 let results;
 switch(choice){
@@ -273,6 +273,8 @@ switch(choice){
     case '6':
         results = searchByOccupation(people);
         continueSearch(results)
+    case '7':
+        break;
     default:
         return searchByTraits(people);
 }
