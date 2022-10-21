@@ -146,16 +146,7 @@ function displayPerson(person) {
     personInfo += `Weight: ${person.weight}\n`;
     personInfo += `Eye Color: ${person.eyeColor}\n`;
     personInfo += `Occupation: ${person.occupation}\n`;
-    //! TODO #1a: finish getting the rest of the information to display //////////////////////////////////////////
-    if (confirm(`${personInfo}\n\n Select 'OK' to go back to person or 'Cancel' to start a new search`)){
-        let personArray = [person];
-        mainMenu(personArray, data);
-    }
-    else {
-        app(data);
-    }
-    // alert(personInfo);
-    // let restart =confirm("Select 'OK' to go back to person or 'Cancel' to start a new search");
+   confirmWindow(personInfo,person);
 }
 // End of displayPerson()
 
@@ -231,14 +222,8 @@ function findPersonFamily(person,people){
     if(siblings.length != 0){for(let sib of siblings){personFamily += `${sib.firstName} ${sib.lastName}\n`;} personFamily += `\n`;}
     else{ personFamily += `None\n`}
     
-    if (confirm(`${personFamily}\n\n Select 'OK' to go back to person or 'Cancel' to start a new search`)){
-        let personArray = [person];
-        mainMenu(personArray, data);
-    }
-    else {
-        app(data);
-    }
-
+    confirmWindow(personFamily,person);
+    
 }
 
 function findPersonSiblings(person,people){
@@ -258,4 +243,14 @@ function findPersonParents(person,people){
 
 function addNamesToString(array,string){
 
+}
+
+function confirmWindow(string,person){
+    if (confirm(`${string}\n\n Select 'OK' to go back to person or 'Cancel' to start a new search`)){
+        let personArray = [person];
+        mainMenu(personArray, data);
+    }
+    else {
+        app(data);
+    }
 }
