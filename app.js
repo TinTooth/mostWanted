@@ -64,14 +64,10 @@ function mainMenu(person, people) {
     // Routes our application based on the user's input
     switch (displayOption) {
         case "info":
-            //! TODO #1: Utilize the displayPerson function //////////////////////////////////////////
-            // HINT: Look for a person-object stringifier utility function to help
             let personInfo = displayPerson(person[0]);
             alert(personInfo);
             break;
         case "family":
-            //! TODO #2: Declare a findPersonFamily function //////////////////////////////////////////
-            // HINT: Look for a people-collection stringifier utility function to help
             let personFamily = findPersonFamily(person[0], people);
             alert(personFamily);
             break;
@@ -234,4 +230,11 @@ function confirmWindow(string,person){
     else {
         app(data);
     }
+}
+
+function findPersonDescendants(person,people){
+    let descendants = people.filter(function(pers){return pers.parents.includes(person.id)})
+    let personsDescendants = '';
+    personsDescendants = addNamesToString(descendants,personsDescendants,'Decendants');
+    confirmWindow(personsDescendants,person);
 }
