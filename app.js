@@ -260,7 +260,7 @@ switch(choice){
 function continueSearch(people){
     let results = '';
     results = addNamesToString(people,results,"Search Results", maleFemale);
-    if (confirm(`${results}\n Select 'Ok' to search these results by another trait or 'Cancel' to start a new Search`)){
+    if (confirm(`${results}\n Select 'Ok' to filter these results by another trait or 'Cancel' to start a new Search`)){
         searchByTraits(people);
     }
     else{
@@ -279,7 +279,12 @@ function searchByGender(people){
 function searchByHeight(people){
     let minchoice = prompt("What should the minimum Height be? (in inches)");
     let maxchoice = prompt("what should the maximum Height be? (in inches)");
+    // VALIDATE promptFor
     let results = people.filter(function(pers){return pers.height > minchoice && pers.height < maxchoice})
     return results;
+
+}
+
+function searchByWeight(people){
 
 }
