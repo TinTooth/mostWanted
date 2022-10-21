@@ -72,7 +72,6 @@ function mainMenu(person, people) {
             alert(personFamily);
             break;
         case "descendants":
-            //! TODO #3: Declare a findPersonDescendants function //////////////////////////////////////////
             // HINT: Review recursion lecture + demo for bonus user story
             let personDescendants = findPersonDescendants(person[0], people);
             alert(personDescendants);
@@ -103,7 +102,7 @@ function searchByName(people) {
 
     // The foundPerson value will be of type Array. Recall that .filter() ALWAYS returns an array.
     let foundPerson = people.filter(function (person) {
-        if (person.firstName === firstName && person.lastName === lastName) {
+        if (person.firstName.toLowerCase() === firstName.toLocaleLowerCase() && person.lastName.toLocaleLowerCase() === lastName.toLocaleLowerCase()) {
             return true;
         }
     });
@@ -181,6 +180,9 @@ function yesNo(input) {
 function chars(input) {
     return true; // Default validation only
 }
+function maleFemale(input){
+return input.toLowerCase() === "male" || input.toLowerCase() === "female";
+}
 // End of chars()
 
 //////////////////////////////////////////* End Of Starter Code *//////////////////////////////////////////
@@ -223,7 +225,7 @@ function addNamesToString(people,string,groupName){
     return string
 }
 function confirmWindow(string,person){
-    if (confirm(`${string}\n\n Select 'OK' to go back to person or 'Cancel' to start a new search`)){
+    if (confirm(`${string}\n Select 'OK' to go back to person or 'Cancel' to start a new search`)){
         let personArray = [person];
         mainMenu(personArray, data);
     }
@@ -237,4 +239,47 @@ function findPersonDescendants(person,people){
     let personsDescendants = '';
     personsDescendants = addNamesToString(descendants,personsDescendants,'Decendants');
     confirmWindow(personsDescendants,person);
+}
+
+function searchByTraits(people){
+let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3.Height\n4.Weight\n5.Eye Color\n6.Occupation");
+//  Change promptFor later
+let results;
+switch(choice){
+    case '1':
+        results = searchByGender(people);
+        continueSearch(results);
+    case '3':
+        results = searchByHeight(people);
+        continueSearch(results);
+    default:
+        return searchByTraits(people);
+}
+}
+
+function continueSearch(people){
+    let results = '';
+    results = addNamesToString(people,results,"Search Results", maleFemale);
+    if (confirm(`${results}\n Select 'Ok' to search these results by another trait or 'Cancel' to start a new Search`)){
+        searchByTraits(people);
+    }
+    else{
+        app(data);
+    }
+
+}
+
+function searchByGender(people){
+    let choice = prompt("Search by 'male' or 'female'?");
+    // change to promptFor later
+    let results = people.filter(function(pers){return pers.gender == choice});
+    return results;
+}
+
+function searchByHeight(people){
+    let minchoice = prompt("What should the minimum Height be? (in inches)");
+    let maxchoice = prompt("what should the maximum Height be? (in inches)");
+    let results = people.filter(function(pers){return pers.height > minchoice && pers.height < maxchoice})
+    return results;
+
 }
