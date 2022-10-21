@@ -193,37 +193,16 @@ function chars(input) {
 
 function findPersonFamily(person,people){
     
-    let siblings = findPersonSiblings(person,people);
     let spouse = findPersonSpouse(person,people);
     let parents = findPersonParents(person,people);
-    
+    let siblings = findPersonSiblings(person,people);
     
     let personFamily ='';
-    
-    if(spouse.length != 0){
-        personFamily += `Spouse:\n${spouse[0].firstName} ${spouse[0].lastName}\n\n`;
-    }
-    else{ 
-        personFamily += `Spouse:\nNone\n\n`;
-    }
+    personFamily = addNamesToString(spouse,personFamily,'Spouse');
+    personFamily = addNamesToString(parents,personFamily,'Parents');
+    personFamily = addNamesToString(siblings,personFamily,'Siblings');
 
-    personFamily += `Parents:\n`;
-    if(parents.length != 0){
-        for(let par of parents){
-            personFamily += `${par.firstName} ${par.lastName}\n`
-        } 
-        personFamily += `\n`;
-    }
-    else{
-        personFamily += `Unknown\n\n`
-    }
-
-    personFamily +=`Siblings:\n`;
-    if(siblings.length != 0){for(let sib of siblings){personFamily += `${sib.firstName} ${sib.lastName}\n`;} personFamily += `\n`;}
-    else{ personFamily += `None\n`}
-    
     confirmWindow(personFamily,person);
-    
 }
 
 function findPersonSiblings(person,people){
@@ -240,11 +219,13 @@ function findPersonParents(person,people){
     let parents = people.filter(function(pers){return pers.id == person.parents[0] || pers.id == person.parents[1]})
     return parents;
 }
-
-function addNamesToString(array,string){
-
+function addNamesToString(people,string,groupName){
+    string += `${groupName}:\n`
+    if(people.length != 0){ for(let person of people){string += `${person.firstName} ${person.lastName}\n`}}
+    else{string += `None\n`}
+    string += `\n`;
+    return string
 }
-
 function confirmWindow(string,person){
     if (confirm(`${string}\n\n Select 'OK' to go back to person or 'Cancel' to start a new search`)){
         let personArray = [person];
