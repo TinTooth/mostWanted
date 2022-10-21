@@ -59,7 +59,7 @@ function mainMenu(person, people) {
         return app(people);
     }
     let displayOption = prompt(
-        `Found ${person[0].firstName} ${person[0].lastName}. Do you want to...\n1. See their Info\n2. See their Family\n3. See Their Descendants?\n4. Restart Search\n5. Quit Search\n\nEnter Corresponding Number`
+        `Found ${person[0].firstName} ${person[0].lastName}. Do you want to...\n1. See their Info\n2. See their Family\n3. See Their Descendants\n4. Restart Search\n5. Quit Search\n\nEnter Corresponding Number`
     );
     // Routes our application based on the user's input
     switch (displayOption) {
@@ -250,35 +250,6 @@ function findPersonDescendants(person,people){
     confirmWindow(personsDescendants,person);
 }
 
-function searchByTraits(people){
-let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
-//  Change promptFor later
-let results;
-switch(choice){
-    case '1':
-        results = searchByGender(people);
-        continueSearch(results);
-    case '2':
-        results = searchByDob(people);
-        continueSearch(results);
-    case '3':
-        results = searchByHeight(people);
-        continueSearch(results);
-    case '4':
-        results = searchByWeight(people);
-        continueSearch(results);
-    case '5':
-        results = searchByEyeColor(people);
-        continueSearch(results);
-    case '6':
-        results = searchByOccupation(people);
-        continueSearch(results)
-    case '7':
-        break;
-    default:
-        return searchByTraits(people);
-}
-}
 
 function continueSearch(people){
     let results = '';
@@ -310,7 +281,7 @@ function searchByHeight(people){
     // VALIDATE promptFor
     let results = people.filter(function(pers){return pers.height > minchoice && pers.height < maxchoice})
     return results;
-
+    
 }
 function searchByWeight(people){
     let minchoice = prompt("What should the minimum Weight be? (in lbs)");
@@ -356,4 +327,39 @@ function searchByOccupation(people){
     // VALIDATION
     let results = people.filter(function(pers){return pers.occupation==choice});
     return results;
+}
+function searchByTraits(people){
+let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
+//  Change promptFor later
+let results;
+switch(choice){
+    case '1':
+        results = searchByGender(people);
+        continueSearch(results);
+        break;
+    case '2':
+        results = searchByDob(people);
+        continueSearch(results);
+        break;
+    case '3':
+        results = searchByHeight(people);
+        continueSearch(results);
+        break;
+    case '4':
+        results = searchByWeight(people);
+        continueSearch(results);
+        break;
+    case '5':
+        results = searchByEyeColor(people);
+        continueSearch(results);
+        break;
+    case '6':
+        results = searchByOccupation(people);
+        continueSearch(results);
+        break;
+    case '7':
+        break;
+    default:
+        return searchByTraits(people);
+}
 }
