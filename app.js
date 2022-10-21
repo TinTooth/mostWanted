@@ -314,3 +314,7 @@ function searchByEyeColor(people){
     let results = people.filter(function(pers){return pers.eyeColor==choice});
     return results;
 }
+
+function searchByOccupation(people){
+
+}
