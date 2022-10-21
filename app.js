@@ -82,6 +82,7 @@ function mainMenu(person, people) {
             break;
         case "quit":
             // Stop application execution
+            location.reload();
             return;
         default:
             // Prompt user again. Another instance of recursion
@@ -258,6 +259,9 @@ switch(choice){
     case '5':
         results = searchByEyeColor(people);
         continueSearch(results);
+    case '6':
+        results = searchByOccupation(people);
+        continueSearch(results)
     default:
         return searchByTraits(people);
 }
@@ -306,15 +310,23 @@ function addItemToString(array,string,groupName){
 }
 
 function searchByEyeColor(people){
-    let eyeColors = people.map(function(pers){return pers.eyeColor})
-    let uniqueEyeColors = eyeColors.filter(function(color,index,array){return array.indexOf(color) == index})
-    let colorsString;
-    colorsString = addItemToString(uniqueEyeColors,colorsString,"Eye Colors in this List:\n")
-    let choice = prompt(`${colorsString} Which Eye Color would you like to search by?`)
+    let options = people.map(function(pers){return pers.eyeColor})
+    let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index})
+    let string;
+    string = addItemToString(uniqueOptions,string, `Eye Colors in this List:\n`)
+    let choice = prompt(`${string} Which Eye Color would you like to search by?`)
+    // VALIDATION
     let results = people.filter(function(pers){return pers.eyeColor==choice});
     return results;
 }
 
 function searchByOccupation(people){
-
+    let options = people.map(function(pers){return pers.occupation})
+    let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index})
+    let string;
+    string = addItemToString(uniqueOptions,string, `Eye Colors in this List:\n`)
+    let choice = prompt(`${string} Which Eye Color would you like to search by?`)
+    // VALIDATION
+    let results = people.filter(function(pers){return pers.occupation==choice});
+    return results;
 }
