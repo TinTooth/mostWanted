@@ -82,8 +82,7 @@ function mainMenu(person, people) {
             break;
         case "quit":
             // Stop application execution
-            location.reload();
-            return;
+            break;
         default:
             // Prompt user again. Another instance of recursion
             return mainMenu(person, people);
@@ -250,6 +249,9 @@ switch(choice){
     case '1':
         results = searchByGender(people);
         continueSearch(results);
+    case '2':
+        results = searchByDob(people);
+        continueSearch(results);
     case '3':
         results = searchByHeight(people);
         continueSearch(results);
@@ -284,6 +286,14 @@ function searchByGender(people){
     let results = people.filter(function(pers){return pers.gender === choice});
     return results;
 }
+
+function searchByDob(people){
+    let choice = prompt("Select a decade to search by (1950, 1970....)");
+    // VALLLIDATTTTEEEEE
+    let results = people.filter(function(pers){return pers.dob.charAt(5) ==  choice.charAt(0) && pers.dob.charAt(6) == choice.charAt(1) && pers.dob.charAt(7) == choice.charAt(2)});
+    return results
+}
+
 function searchByHeight(people){
     let minchoice = prompt("What should the minimum Height be? (in inches)");
     let maxchoice = prompt("what should the maximum Height be? (in inches)");
@@ -324,8 +334,8 @@ function searchByOccupation(people){
     let options = people.map(function(pers){return pers.occupation})
     let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index})
     let string;
-    string = addItemToString(uniqueOptions,string, `Eye Colors in this List:\n`)
-    let choice = prompt(`${string} Which Eye Color would you like to search by?`)
+    string = addItemToString(uniqueOptions,string, `Occupations in this List:\n`)
+    let choice = prompt(`${string} Which Occupation would you like to search by?`)
     // VALIDATION
     let results = people.filter(function(pers){return pers.occupation==choice});
     return results;
