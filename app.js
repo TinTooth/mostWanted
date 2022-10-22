@@ -143,7 +143,7 @@ function displayPerson(person) {
     personInfo += `Weight: ${person.weight}\n`;
     personInfo += `Eye Color: ${person.eyeColor}\n`;
     personInfo += `Occupation: ${person.occupation}\n`;
-   confirmWindow(personInfo,person);
+   confirmWindow(personInfo,person,"Select 'OK' to go back to person or 'Cancel' to start a new search");
 }
 // End of displayPerson()
 
@@ -202,9 +202,8 @@ function findPersonFamily(person,people){
     personFamily = addNamesToString(parents,personFamily,'Parents');
     personFamily = addNamesToString(siblings,personFamily,'Siblings');
 
-    confirmWindow(personFamily,person);
+    confirmWindow(personFamily,person,"Select 'OK' to go back to person or 'Cancel' to start a new search");
 }
-
 function findPersonSiblings(person,people){
     let siblings = people.filter(function(pers){
         return pers.parents.includes(person.parents[0]) && pers.id != person.id || 
@@ -235,8 +234,8 @@ function addNamesToString(people,string,groupName){
     string += `\n`;
     return string
 }
-function confirmWindow(string,person){
-    if (confirm(`${string}\n Select 'OK' to go back to person or 'Cancel' to start a new search`)){
+function confirmWindow(string,person,confirmString){
+    if (confirm(`${string}\n ${confirmString}`)){
         let personArray = [person];
         mainMenu(personArray, data);
     }
@@ -244,18 +243,16 @@ function confirmWindow(string,person){
         app(data);
     }
 }
-
 function findPersonDescendants(person,people){
     let descendants = people.filter(function(pers){return pers.parents.includes(person.id)})
     let personsDescendants = '';
     personsDescendants = addNamesToString(descendants,personsDescendants,'Decendants');
-    confirmWindow(personsDescendants,person);
+    confirmWindow(personsDescendants,person,"Select 'OK' to go back to person or 'Cancel' to start a new search");
 }
-
 
 function continueSearch(people){
     let results ='';
-    results = addNamesToString(people,results,"Search Results", maleFemale);
+    results = addNamesToString(people,results,"Search Results");
     results += `Number of Results: ${people.length}\n`;
     if (confirm(`${results}\n Select 'Ok' to filter these results by another trait or 'Cancel' to start a new Search`)){
         searchByTrait(people);
