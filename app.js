@@ -76,7 +76,8 @@ function mainMenu(person, people) {
             break;
         case "3":
             // HINT: Review recursion lecture + demo for bonus user story
-            let personDescendants = findPersonDescendants(person[0], people);
+            let personsDescendants = ``;
+            let personDescendants = findPersonDescendants(person[0], people,personsDescendants);
             confirmWindow(personDescendants,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
             break;
         case "4":
@@ -242,19 +243,19 @@ function searchByTrait(people){
             continueSearch(results);
             break;
         case '3':
-            results = searchByHeight(people);
+            results = searchByTraitByRange(people,"Height","inches");
             continueSearch(results);
             break;
         case '4':
-            results = searchByWeight(people);
+            results = searchByTraitByRange(people,"Weight","lbs");
             continueSearch(results);
             break;
         case '5':
-            results = searchByEyeColor(people);
+            results = searchByTraitWithManyOptions(people,"eyeColor","Eye Color");
             continueSearch(results);
             break;
         case '6':
-            results = searchByOccupation(people);
+            results = searchByTraitWithManyOptions(people,"occupation", "Occupation");
             continueSearch(results);
             break;
         case '7':
@@ -262,8 +263,7 @@ function searchByTrait(people){
         default:
             return searchByTraits(people);
     }
-    }
-
+}
 function findPersonFamily(person,people){
     
     let spouse = findPersonSpouse(person,people);
@@ -291,7 +291,14 @@ function findPersonParents(person,people){
     let parents = people.filter(function(pers){return pers.id == person.parents[0] || pers.id == person.parents[1]})
     return parents;
 }
-
+function findPersonDescendants(person,people,personsDescendants){
+    let descendants = people.filter(function(pers){return pers.parents.includes(person.id)})
+    personsDescendants = addNamesToString(descendants,personsDescendants,`${person.firstName} ${person.lastName}'s Children`);
+    if (descendants.length != 0){
+        for(let dec of descendants){personsDescendants = findPersonDescendants(dec,people,personsDescendants)}
+    }
+    return personsDescendants;
+}
 /**
  * This takes an array of people and adds their names to a string,underneath the groupName in a column
  * so it can be displayed in a Confrim window.
@@ -307,6 +314,22 @@ function addNamesToString(people,string,groupName){
     string += `\n`;
     return string
 }
+/**
+ * This takes an array of strings and adds them to a string,underneath the groupName in a column
+ * so it can be displayed in a Confrim window.
+ * @param {array} array  array of strings.
+ * @param {string} string  a string that the results are stored in
+ * @param {string} groupName a string that is listed above the strings
+ * @returns {string}          
+ */
+ function addItemToString(array,string,groupName){
+    string +=`${groupName}`;
+    for (let item of array){
+        string +=`${item} \n`;
+    }
+    string += `\n`;
+    return string;
+}
 function confirmWindow(string,person,confirmString){
     if (confirm(`${string}\n ${confirmString}`)){
         let personArray = [person];
@@ -315,13 +338,6 @@ function confirmWindow(string,person,confirmString){
     else {
         app(data);
     }
-}
-
-function findPersonDescendants(person,people){
-    let descendants = people.filter(function(pers){return pers.parents.includes(person.id)})
-    let personsDescendants = ``;
-    personsDescendants = addNamesToString(descendants,personsDescendants,'Decendants');
-    return personsDescendants;
 }
 function continueSearch(people){
     let results ='';
@@ -346,54 +362,20 @@ function searchByDob(people){
     let results = people.filter(function(pers){return pers.dob.charAt(5) ==  choice.charAt(0) && pers.dob.charAt(6) == choice.charAt(1) && pers.dob.charAt(7) == choice.charAt(2)});
     return results
 }
-function searchByHeight(people){
-    let minchoice = prompt("What should the minimum Height be? (in inches)");
-    let maxchoice = prompt("what should the maximum Height be? (in inches)");
-    // VALIDATE promptFor
-    let results = people.filter(function(pers){return pers.height > minchoice && pers.height < maxchoice})
-    return results;
-    
-}
-function searchByWeight(people){
-    let minchoice = prompt("What should the minimum Weight be? (in lbs)");
-    let maxchoice = prompt("what should the maximum Weight be? (in lbs)");
-    // VALIDATE promptFor
-    let results = people.filter(function(pers){return pers.weight > minchoice && pers.weight < maxchoice})
+function searchByTraitByRange(people,key,measurement){
+    let minchoice = prompt(`What should the minimum ${key} be? (in ${measurement})`);
+    let maxchoice = prompt(`what should the maximum ${key} be? (in ${measurement})`);
+    // Validate prompt
+    let results = people.filter(function(pers){return pers[key.toLocaleLowerCase()] > minchoice && pers[key.toLocaleLowerCase()] < maxchoice})
     return results;
 }
-/**
- * This takes an array of strings and adds them to a string,underneath the groupName in a column
- * so it can be displayed in a Confrim window.
- * @param {array} array  array of strings.
- * @param {string} string  a string that the results are stored in
- * @param {string} groupName a string that is listed above the strings
- * @returns {string}          
- */
-function addItemToString(array,string,groupName){
-    string +=`${groupName}`;
-    for (let item of array){
-        string +=`${item} \n`;
-    }
-    string += `\n`;
-    return string;
-}
-function searchByEyeColor(people){
-    let options = people.map(function(pers){return pers.eyeColor})
-    let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index})
-    let string ='';
-    string = addItemToString(uniqueOptions,string, `Eye Colors in this List:\n`)
-    let choice = prompt(`${string} Which Eye Color would you like to search by?`)
+function searchByTraitWithManyOptions(people,key,displayString){
+    let options = people.map(function(pers){return pers[key]});
+    let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index});
+    let optionsString ='';
+    optionsString = addItemToString(uniqueOptions,optionsString, `${displayString} in this List:\n`);
+    let choice = prompt(`${optionsString} Which ${displayString} would you like to search by?`);
     // VALIDATION
-    let results = people.filter(function(pers){return pers.eyeColor==choice});
-    return results;
-}
-function searchByOccupation(people){
-    let options = people.map(function(pers){return pers.occupation})
-    let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index})
-    let string = ``;
-    string = addItemToString(uniqueOptions,string, `Occupations Found:\n`)
-    let choice = prompt(`${string} Which Occupation would you like to search by?`)
-    // VALIDATION
-    let results = people.filter(function(pers){return pers.occupation==choice});
+    let results = people.filter(function(pers){return pers[key]==choice});
     return results;
 }
