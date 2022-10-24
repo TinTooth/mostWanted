@@ -63,18 +63,18 @@ function mainMenu(person, people) {
     switch (displayOption) {
         case "1":
             let personInfo = displayPerson(person[0]);
-            confirmWindow(personInfo,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
+            confirmPersonWindow(personInfo,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
             break;
         case "2":
             let personFamily = findPersonFamily(person[0], people);
-            confirmWindow(personFamily,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
+            confirmPersonWindow(personFamily,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
             
             break;
         case "3":
             // HINT: Review recursion lecture + demo for bonus user story
             let personsDescendants = ``;
             let personDescendants = findPersonDescendants(person[0], people,personsDescendants);
-            confirmWindow(personDescendants,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
+            confirmPersonWindow(personDescendants,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
             break;
         case "4":
             // Restart app() from the very beginning
@@ -226,7 +226,14 @@ function DOB(input){
 }
 function inOptions(input,options){
     return options.includes(input.toLowerCase());
-}    
+}
+function commasThere(input){
+    let commaTrue = true;
+    for(let i = 0; i+1 < input.length; i += 2){
+        commaTrue = input[i+1] ==','
+    }
+    return commaTrue;
+} 
 
 function findPersonFamily(person,people){
     
@@ -294,7 +301,7 @@ function addNamesToString(people,string,groupName){
     string += `\n`;
     return string;
 }
-function confirmWindow(string,person,confirmString){
+function confirmPersonWindow(string,person,confirmString){
     if (confirm(`${string}\n ${confirmString}`)){
         let personArray = [person];
         mainMenu(personArray, data);
@@ -339,9 +346,8 @@ function searchByTraitWithManyOptions(people,key,displayString){
     let results = people.filter(function(pers){return pers[key]==choice.toLowerCase()});
     return results;
 }
-
 function searchByTraits(people){
-    let input = prompt(`Current Number of People: ${people.length}\nWhich Trait or Traits would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n\n7. Restart Search\n8. Quit Search\nEnter the Corresponding Numbers Seperated by Commas\n(1,4,3)`);
+    let input = promptFor(`Current Number of People: ${people.length}\nWhich Trait or Traits would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. RESTART\n8. QUIT\nEnter the Corresponding Numbers Seperated by Commas\n(1,4,3) The searches will be executed in that order`,commasThere);
     let choices = input.split(',');
     let results = people;
     for(let choice of choices){
@@ -368,8 +374,9 @@ function searchByTraits(people){
                 app(data); 
                 break;   
             case '8':
-                break;
+                return;
             default:
+                alert(`${choice} is Not a Valid Choice`);
                 continue;
         }
     }
