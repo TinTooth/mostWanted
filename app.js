@@ -195,10 +195,10 @@ function displayPerson(person) {
  * @param {Function} valid      A callback function used to validate basic user input.
  * @returns {String}            The valid string input retrieved from the user.
  */
-function promptFor(question, valid) {
+function promptFor(question, valid,options =[]) {
     do {
         var response = prompt(question).trim();
-    } while (!response || !valid(response));
+    } while (!response || !valid(response,options));
     return response;
 }
 // End of promptFor()
@@ -212,7 +212,7 @@ function yesNo(input) {
     return input.toLowerCase() === "yes" || input.toLowerCase() === "no";
 }
 // End of yesNo()
-
+// VALIDATE FUNCTIONS
 /**
  * This helper function operates as a default callback for promptFor's validation.
  * Feel free to modify this to suit your needs.
@@ -225,45 +225,13 @@ function chars(input) {
 function maleFemale(input){
 return input.toLowerCase() === "male" || input.toLowerCase() === "female";
 }
-// End of chars()
-
-//////////////////////////////////////////* End Of Starter Code *//////////////////////////////////////////
-// Any additional functions can be written below this line 👇. Happy Coding! 😁
-function searchByTrait(people){
-    let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
-    //  Change promptFor later
-    let results;
-    switch(choice){
-        case '1':
-            results = searchByGender(people);
-            continueSearch(results);
-            break;
-        case '2':
-            results = searchByDob(people);
-            continueSearch(results);
-            break;
-        case '3':
-            results = searchByTraitByRange(people,"Height","inches");
-            continueSearch(results);
-            break;
-        case '4':
-            results = searchByTraitByRange(people,"Weight","lbs");
-            continueSearch(results);
-            break;
-        case '5':
-            results = searchByTraitWithManyOptions(people,"eyeColor","Eye Color");
-            continueSearch(results);
-            break;
-        case '6':
-            results = searchByTraitWithManyOptions(people,"occupation", "Occupation");
-            continueSearch(results);
-            break;
-        case '7':
-            break;
-        default:
-            return searchByTraits(people);
-    }
+function DOB(input){
+    return input.length == 4;
 }
+function inOptions(input,options){
+    return options.includes(input.toLowerCase());
+}    
+
 function findPersonFamily(person,people){
     
     let spouse = findPersonSpouse(person,people);
@@ -339,6 +307,41 @@ function confirmWindow(string,person,confirmString){
         app(data);
     }
 }
+function searchByTrait(people){
+    let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
+    //  Change promptFor later
+    let results;
+    switch(choice){
+        case '1':
+            results = searchByGender(people);
+            continueSearch(results);
+            break;
+        case '2':
+            results = searchByDob(people);
+            continueSearch(results);
+            break;
+        case '3':
+            results = searchByTraitByRange(people,"Height","inches");
+            continueSearch(results);
+            break;
+        case '4':
+            results = searchByTraitByRange(people,"Weight","lbs");
+            continueSearch(results);
+            break;
+        case '5':
+            results = searchByTraitWithManyOptions(people,"eyeColor","Eye Color");
+            continueSearch(results);
+            break;
+        case '6':
+            results = searchByTraitWithManyOptions(people,"occupation", "Occupation");
+            continueSearch(results);
+            break;
+        case '7':
+            break;
+        default:
+            return searchByTrait(people);
+    }
+}
 function continueSearch(people){
     let results ='';
     results = addNamesToString(people,results,"Search Results");
@@ -351,21 +354,19 @@ function continueSearch(people){
     }
 }
 function searchByGender(people){
-    let choice = prompt("Search by 'male' or 'female'?");
-    // change to promptFor later
+    let choice = promptFor("Search by 'male' or 'female'?",maleFemale);
+    
     let results = people.filter(function(pers){return pers.gender === choice});
     return results;
 }
 function searchByDob(people){
-    let choice = prompt("Select a decade to search by (1950, 1970....)");
-    // VALLLIDATTTTEEEEE
+    let choice = promptFor("Select a decade to search by (1950, 1970....)",DOB);
     let results = people.filter(function(pers){return pers.dob.charAt(5) ==  choice.charAt(0) && pers.dob.charAt(6) == choice.charAt(1) && pers.dob.charAt(7) == choice.charAt(2)});
     return results
 }
 function searchByTraitByRange(people,key,measurement){
-    let minchoice = prompt(`What should the minimum ${key} be? (in ${measurement})`);
-    let maxchoice = prompt(`what should the maximum ${key} be? (in ${measurement})`);
-    // Validate prompt
+    let minchoice = promptFor(`What should the minimum ${key} be? (in ${measurement})`,chars);
+    let maxchoice = promptFor(`what should the maximum ${key} be? (in ${measurement})`,chars);
     let results = people.filter(function(pers){return pers[key.toLocaleLowerCase()] > minchoice && pers[key.toLocaleLowerCase()] < maxchoice})
     return results;
 }
@@ -374,8 +375,9 @@ function searchByTraitWithManyOptions(people,key,displayString){
     let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index});
     let optionsString ='';
     optionsString = addItemToString(uniqueOptions,optionsString, `${displayString} in this List:\n`);
-    let choice = prompt(`${optionsString} Which ${displayString} would you like to search by?`);
-    // VALIDATION
-    let results = people.filter(function(pers){return pers[key]==choice});
+    let choice = promptFor(`${optionsString} Which ${displayString} would you like to search by?`,inOptions,uniqueOptions);
+    let results = people.filter(function(pers){return pers[key]==choice.toLowerCase()});
     return results;
 }
+
+
