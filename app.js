@@ -29,11 +29,7 @@ function app(people) {
             searchResults = searchByName(people);
             break;
         case "no":
-            //! TODO #4: Declare a searchByTraits (multiple traits) function //////////////////////////////////////////
-                //! TODO #4a: Provide option to search for single or multiple //////////////////////////////////////////
-
-
-            searchResults = searchByTrait(people);
+            searchResults = searchByTraits(people);  
             break;
         default:
             // Re-initializes the app() if neither case was hit above. This is an instance of recursion.
@@ -382,4 +378,37 @@ function searchByTraitWithManyOptions(people,key,displayString){
     return results;
 }
 
-
+function searchByTraits(people){
+    let input = prompt("Which trait/s would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n\n7. Restart Search\n8. Quit Search\nEnter the Corresponding Numbers Seperated by Commas\n(1,4,3)");
+    let choices = input.split(',');
+    let results = people;
+    for(let choice of choices){
+        switch(choice){
+            case '1':
+                results = searchByGender(results);
+                break;
+            case '2':
+                results = searchByDob(results);
+                break;
+            case '3':
+                results = searchByTraitByRange(results,"Height","inches");
+                break;
+            case '4':
+                results = searchByTraitByRange(results,"Weight","lbs");
+                break;
+            case '5':
+                results = searchByTraitWithManyOptions(results,"eyeColor","Eye Color");
+                break;
+            case '6':
+                results = searchByTraitWithManyOptions(results,"occupation", "Occupation");
+                break;
+            case '7':
+                app(data);    
+            case '8':
+                break;
+            default:
+                continue;
+        }
+    }
+    continueSearch(results);
+}
