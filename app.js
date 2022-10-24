@@ -308,7 +308,7 @@ function confirmWindow(string,person,confirmString){
     }
 }
 function searchByTrait(people){
-    let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
+    let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n\n7. Restart Search\n8. Quit Search\n\nEnter the Corresponding Number");
     //  Change promptFor later
     let results;
     switch(choice){
@@ -337,6 +337,8 @@ function searchByTrait(people){
             continueSearch(results);
             break;
         case '7':
+            app(data);    
+        case '8':
             break;
         default:
             return searchByTrait(people);
