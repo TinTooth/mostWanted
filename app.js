@@ -275,7 +275,7 @@ function addNamesToString(people,string,groupName){
     string += `${groupName}:\n`
     if(people.length != 0){ for(let person of people){string += `${person.firstName} ${person.lastName}\n`}}
     else{string += `None\n`}
-    string += `\n`;
+    // string += `\n`;
     return string
 }
 /**
@@ -303,56 +303,18 @@ function confirmWindow(string,person,confirmString){
         app(data);
     }
 }
-function searchByTrait(people){
-    let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n\n7. Restart Search\n8. Quit Search\n\nEnter the Corresponding Number");
-    //  Change promptFor later
-    let results;
-    switch(choice){
-        case '1':
-            results = searchByGender(people);
-            continueSearch(results);
-            break;
-        case '2':
-            results = searchByDob(people);
-            continueSearch(results);
-            break;
-        case '3':
-            results = searchByTraitByRange(people,"Height","inches");
-            continueSearch(results);
-            break;
-        case '4':
-            results = searchByTraitByRange(people,"Weight","lbs");
-            continueSearch(results);
-            break;
-        case '5':
-            results = searchByTraitWithManyOptions(people,"eyeColor","Eye Color");
-            continueSearch(results);
-            break;
-        case '6':
-            results = searchByTraitWithManyOptions(people,"occupation", "Occupation");
-            continueSearch(results);
-            break;
-        case '7':
-            app(data);    
-        case '8':
-            break;
-        default:
-            return searchByTrait(people);
-    }
-}
 function continueSearch(people){
-    let results ='';
+    let results =`Number of Results: ${people.length}\n`;
     results = addNamesToString(people,results,"Search Results");
-    results += `Number of Results: ${people.length}\n`;
-    if (confirm(`${results}\n Select 'Ok' to filter these results by another trait or 'Cancel' to start a new Search`)){
-        searchByTrait(people);
+    if (confirm(`${results}\nSelect 'Ok' to filter these results by another trait or 'Cancel' to start a new Search`)){
+        searchByTraits(people);
     }
     else{
         app(data);
     }
 }
 function searchByGender(people){
-    let choice = promptFor("Search by 'male' or 'female'?",maleFemale);
+    let choice = promptFor(`Current Number of People: ${people.length}\nSearch by 'male' or 'female'?`,maleFemale);
     
     let results = people.filter(function(pers){return pers.gender === choice});
     return results;
@@ -363,7 +325,7 @@ function searchByDob(people){
     return results
 }
 function searchByTraitByRange(people,key,measurement){
-    let minchoice = promptFor(`What should the minimum ${key} be? (in ${measurement})`,chars);
+    let minchoice = promptFor(`Current Number of People: ${people.length}\nWhat should the minimum ${key} be? (in ${measurement})`,chars);
     let maxchoice = promptFor(`what should the maximum ${key} be? (in ${measurement})`,chars);
     let results = people.filter(function(pers){return pers[key.toLocaleLowerCase()] > minchoice && pers[key.toLocaleLowerCase()] < maxchoice})
     return results;
@@ -373,13 +335,13 @@ function searchByTraitWithManyOptions(people,key,displayString){
     let uniqueOptions = options.filter(function(option,index,array){return array.indexOf(option) == index});
     let optionsString ='';
     optionsString = addItemToString(uniqueOptions,optionsString, `${displayString} in this List:\n`);
-    let choice = promptFor(`${optionsString} Which ${displayString} would you like to search by?`,inOptions,uniqueOptions);
+    let choice = promptFor(`Current Number of People: ${people.length}\n${optionsString} Which ${displayString} would you like to search by?`,inOptions,uniqueOptions);
     let results = people.filter(function(pers){return pers[key]==choice.toLowerCase()});
     return results;
 }
 
 function searchByTraits(people){
-    let input = prompt("Which trait/s would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n\n7. Restart Search\n8. Quit Search\nEnter the Corresponding Numbers Seperated by Commas\n(1,4,3)");
+    let input = prompt(`Current Number of People: ${people.length}\nWhich Trait or Traits would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n\n7. Restart Search\n8. Quit Search\nEnter the Corresponding Numbers Seperated by Commas\n(1,4,3)`);
     let choices = input.split(',');
     let results = people;
     for(let choice of choices){
@@ -400,10 +362,11 @@ function searchByTraits(people){
                 results = searchByTraitWithManyOptions(results,"eyeColor","Eye Color");
                 break;
             case '6':
-                results = searchByTraitWithManyOptions(results,"occupation", "Occupation");
+                results = searchByTraitWithManyOptions(results,"occupation", "Occupations");
                 break;
             case '7':
-                app(data);    
+                app(data); 
+                break;   
             case '8':
                 break;
             default:
