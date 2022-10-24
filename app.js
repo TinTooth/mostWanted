@@ -67,16 +67,17 @@ function mainMenu(person, people) {
     switch (displayOption) {
         case "1":
             let personInfo = displayPerson(person[0]);
-            alert(personInfo);
+            confirmWindow(personInfo,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
             break;
         case "2":
             let personFamily = findPersonFamily(person[0], people);
-            alert(personFamily);
+            confirmWindow(personFamily,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
+            
             break;
         case "3":
             // HINT: Review recursion lecture + demo for bonus user story
             let personDescendants = findPersonDescendants(person[0], people);
-            alert(personDescendants);
+            confirmWindow(personDescendants,person[0],"Select 'OK' to go back to person or 'Cancel' to start a new search");
             break;
         case "4":
             // Restart app() from the very beginning
@@ -91,6 +92,42 @@ function mainMenu(person, people) {
     }
 }
 // End of mainMenu()
+
+function searchByTrait(people){
+let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
+//  Change promptFor later
+let results;
+switch(choice){
+    case '1':
+        results = searchByGender(people);
+        continueSearch(results);
+        break;
+    case '2':
+        results = searchByDob(people);
+        continueSearch(results);
+        break;
+    case '3':
+        results = searchByHeight(people);
+        continueSearch(results);
+        break;
+    case '4':
+        results = searchByWeight(people);
+        continueSearch(results);
+        break;
+    case '5':
+        results = searchByEyeColor(people);
+        continueSearch(results);
+        break;
+    case '6':
+        results = searchByOccupation(people);
+        continueSearch(results);
+        break;
+    case '7':
+        break;
+    default:
+        return searchByTraits(people);
+}
+}
 
 /**
  * This function is used when searching the people collection by
@@ -143,7 +180,9 @@ function displayPerson(person) {
     personInfo += `Weight: ${person.weight}\n`;
     personInfo += `Eye Color: ${person.eyeColor}\n`;
     personInfo += `Occupation: ${person.occupation}\n`;
-   confirmWindow(personInfo,person,"Select 'OK' to go back to person or 'Cancel' to start a new search");
+
+    return personInfo;
+   
 }
 // End of displayPerson()
 
@@ -189,7 +228,41 @@ return input.toLowerCase() === "male" || input.toLowerCase() === "female";
 
 //////////////////////////////////////////* End Of Starter Code *//////////////////////////////////////////
 // Any additional functions can be written below this line 👇. Happy Coding! 😁
-
+function searchByTrait(people){
+    let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
+    //  Change promptFor later
+    let results;
+    switch(choice){
+        case '1':
+            results = searchByGender(people);
+            continueSearch(results);
+            break;
+        case '2':
+            results = searchByDob(people);
+            continueSearch(results);
+            break;
+        case '3':
+            results = searchByHeight(people);
+            continueSearch(results);
+            break;
+        case '4':
+            results = searchByWeight(people);
+            continueSearch(results);
+            break;
+        case '5':
+            results = searchByEyeColor(people);
+            continueSearch(results);
+            break;
+        case '6':
+            results = searchByOccupation(people);
+            continueSearch(results);
+            break;
+        case '7':
+            break;
+        default:
+            return searchByTraits(people);
+    }
+    }
 
 function findPersonFamily(person,people){
     
@@ -201,8 +274,8 @@ function findPersonFamily(person,people){
     personFamily = addNamesToString(spouse,personFamily,'Spouse');
     personFamily = addNamesToString(parents,personFamily,'Parents');
     personFamily = addNamesToString(siblings,personFamily,'Siblings');
-
-    confirmWindow(personFamily,person,"Select 'OK' to go back to person or 'Cancel' to start a new search");
+    return personFamily;
+    
 }
 function findPersonSiblings(person,people){
     let siblings = people.filter(function(pers){
@@ -243,13 +316,13 @@ function confirmWindow(string,person,confirmString){
         app(data);
     }
 }
+
 function findPersonDescendants(person,people){
     let descendants = people.filter(function(pers){return pers.parents.includes(person.id)})
-    let personsDescendants = '';
+    let personsDescendants = ``;
     personsDescendants = addNamesToString(descendants,personsDescendants,'Decendants');
-    confirmWindow(personsDescendants,person,"Select 'OK' to go back to person or 'Cancel' to start a new search");
+    return personsDescendants;
 }
-
 function continueSearch(people){
     let results ='';
     results = addNamesToString(people,results,"Search Results");
@@ -267,14 +340,12 @@ function searchByGender(people){
     let results = people.filter(function(pers){return pers.gender === choice});
     return results;
 }
-
 function searchByDob(people){
     let choice = prompt("Select a decade to search by (1950, 1970....)");
     // VALLLIDATTTTEEEEE
     let results = people.filter(function(pers){return pers.dob.charAt(5) ==  choice.charAt(0) && pers.dob.charAt(6) == choice.charAt(1) && pers.dob.charAt(7) == choice.charAt(2)});
     return results
 }
-
 function searchByHeight(people){
     let minchoice = prompt("What should the minimum Height be? (in inches)");
     let maxchoice = prompt("what should the maximum Height be? (in inches)");
@@ -325,39 +396,4 @@ function searchByOccupation(people){
     // VALIDATION
     let results = people.filter(function(pers){return pers.occupation==choice});
     return results;
-}
-function searchByTrait(people){
-let choice = prompt("Which trait would you like to search by? \n1. Gender\n2. Date of Birth\n3. Height\n4. Weight\n5. Eye Color\n6. Occupation\n7. Quit Search\n\nEnter the Corresponding Number");
-//  Change promptFor later
-let results;
-switch(choice){
-    case '1':
-        results = searchByGender(people);
-        continueSearch(results);
-        break;
-    case '2':
-        results = searchByDob(people);
-        continueSearch(results);
-        break;
-    case '3':
-        results = searchByHeight(people);
-        continueSearch(results);
-        break;
-    case '4':
-        results = searchByWeight(people);
-        continueSearch(results);
-        break;
-    case '5':
-        results = searchByEyeColor(people);
-        continueSearch(results);
-        break;
-    case '6':
-        results = searchByOccupation(people);
-        continueSearch(results);
-        break;
-    case '7':
-        break;
-    default:
-        return searchByTraits(people);
-}
 }
